@@ -1,45 +1,60 @@
-var daysHead = document.querySelector('.days');
-var hourHead = document.querySelector('.hours'); // Corrected the selector
-var minuteHead = document.querySelector('.minutes');
-var secondHead = document.querySelector('.seconds');
-var dayCard = document.querySelector('#day'); // Corrected the variable name
-var hourCard = document.querySelector('#hour');
-var minuteCard = document.querySelector('#minute');
-var secondCard = document.querySelector('#second');
+const days = document.querySelector('.days')
+const hours = document.querySelector('.hours')
+const minutes = document.querySelector('.minutes')
+const seconds = document.querySelector('.seconds')
 
-let days;
-let hours;
-let minutes;
-let seconds;
+let timeLeft = {
+    d: 0,
+    h: 0,
+    m: 0,
+    s: 0,
+}
 
-var countDownDate = new Date("Jan 1, 2023 00:00:00").getTime();
+let totalSeconds;
 
-var x = setInterval(function () {
-    // get today's date and time
-    var now = new Date().getTime();
-
-    // find the distance between now and the future date
-    var distance = countDownDate - now;
-
-    // time calculations for days, hours, minutes, and seconds
-    days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Update the HTML elements with the calculated values
-    daysHead.innerHTML = days;
-    hourHead.innerHTML = hours;
-    minuteHead.innerHTML = minutes;
-    secondHead.innerHTML = seconds;
-
-    // Check if the countdown is over
-    if (distance < 0) {
-        clearInterval(x);
-        // Optionally, you can display a message or take some action when the countdown is over
-        daysHead.innerHTML = 0;
-        hourHead.innerHTML = 0;
-        minuteHead.innerHTML = 0;
-        secondHead.innerHTML = 0;
+  function init() {
+        totalSeconds = Math.floor((new Date('01/01/2024') - new Date()) / 1000); 
+        setTimeLeft();
+        let interval = setInterval(() => {
+            if (totalSeconds < 0) {
+                clearInterval(interval);
+            }
+            countTime();
+        }, 1000);
     }
-}, 1000);
+
+ function countTime() {
+        if (totalSeconds > 0) {
+            --timeLeft.s;
+            if (timeLeft.m >= 0 && timeLeft.s < 0) {
+                timeLeft.s = 59;
+                --timeLeft.m;
+                if (timeLeft.h >= 0 && timeLeft.m < 0) {
+                    timeLeft.m = 59;
+                    --timeLeft.h;
+                    if (timeLeft.d >= 0 && timeLeft.h < 0) {
+                        timeLeft.h = 23;
+                        --timeLeft.d;
+                    }
+                }
+            }
+        }
+        --totalSeconds;
+        printTime();
+}
+    
+function printTime() {
+    days.innerText = timeLeft.d;
+    hours.innerText = timeLeft.h;
+    minutes.innerText = timeLeft.m;
+    seconds.innerText = timeLeft.s;
+}
+
+   function setTimeLeft() {
+        timeLeft.d = Math.floor(totalSeconds / (60 * 60 * 24));
+        timeLeft.h = Math.floor(totalSeconds / (60 * 60) % 24);
+        timeLeft.m = Math.floor(totalSeconds / (60) % 60);
+        timeLeft.s = Math.floor(totalSeconds % 60);
+    }
+
+init();
