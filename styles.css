@@ -81,9 +81,7 @@ body {
     font-weight: bold;
     letter-spacing: 3px;
     cursor: pointer;
-    /* -webkit-background-clip: text; 
-    background-clip: text;
-    -moz-text-fill-color:transparent;  */
+    
 }
 
 .heading h1:hover{
@@ -197,8 +195,8 @@ cursor: pointer;
     border-radius: 50%;
 }
 
-.social-icons-wrapper img:hover {
-    color: var(--soft-red);
+.social-icons-wrapper a:hover img {
+    background-color: var(--soft-red);
 }
 
 .attribution {
